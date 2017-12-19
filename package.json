@@ -1,0 +1,41 @@
+{
+  "name": "capymail-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dboff": "killall mongod",
+    "api_start": "node ./index.js",
+    "api_watch": "nodemon ./index.js",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "8.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stuartkershaw/capymail-backend.git"
+  },
+  "author": "stuartdkershaw@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stuartkershaw/capymail-backend/issues"
+  },
+  "homepage": "https://github.com/stuartkershaw/capymail-backend#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "http-errors": "^1.6.2",
+    "jsonwebtoken": "^8.1.0",
+    "mailgun-js": "^0.13.1",
+    "mongoose": "^4.13.7",
+    "morgan": "^1.9.0",
+    "socket.io": "^2.0.4",
+    "superagent": "^3.8.2",
+    "validator": "^9.2.0"
+  }
+}
