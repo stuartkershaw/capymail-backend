@@ -1,4 +1,4 @@
-capymail frontend
+capymail backend
 ===
 > Realtime messaging with mailgun and socket.io
 
