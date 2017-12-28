@@ -50,7 +50,6 @@ accountSchema.methods.update = function(data) {
 const Account = module.exports = mongoose.model('account', accountSchema);
 
 Account.create = function(data) {
-  data = {...data};
   let {password} = data;
   delete data.password;
   return bcrypt.hash(password, 8)

@@ -12,7 +12,8 @@ const mailgun = require('mailgun-js')({apiKey: mailgun_api, domain: mailgun_doma
 const messageRouter = module.exports = new Router();
 
 messageRouter.get('/messages', bearerAuth, (req, res, next) => {
-  Message.find({profile: req.query._id})
+  console.log(req.query);
+  Message.find({conversation: req.query._id})
     .then(messages => {
       if (!messages) {
         throw httpErrors(404, '__REQUEST_ERROR__ messages not found');
@@ -23,19 +24,17 @@ messageRouter.get('/messages', bearerAuth, (req, res, next) => {
 });
 
 messageRouter.post('/messages', bearerAuth, (req, res, next) => {
-  if (!req.body.content ||! req.body.recipientEmail || 
-      !req.body.clientProfile.email || !req.body.clientProfile.firstName || 
-      !req.body.clientProfile.lastName) {
-    return next(httpErrors(400, '__REQUEST_ERROR__ content, recipient, and sender details required'));
+  console.log(req.body.message);
+  if (!req.body.message.content ||! req.body.message.recipientEmail || 
+      !req.body.message.senderEmail || !req.body.message.senderFirstName || 
+      !req.body.message.senderLastName || !req.body.conversation) {
+    return next(httpErrors(400, '__REQUEST_ERROR__ content, recipient, sender, and conversation details required'));
   }
   return new Message({
     // jshint ignore:start
-    ...req.body,
+    ...req.body.message,
     // jshint ignore:end
-    senderEmail: req.body.clientProfile.email,
-    senderFirstName: req.body.clientProfile.firstName,
-    senderLastName: req.body.clientProfile.lastName,
-    profile: req.body.clientProfile._id,
+    conversation: req.body.conversation._id,
   }).save()
     .then(message => {
       res.json(message);
@@ -65,14 +64,14 @@ messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
   })
   .then(() => {
     return new Message({
+      emailId: body['Message-Id'],
       subject: body.subject,
       content: body['body-html'],
-      recipientEmail: body.recipient,
       senderEmail: body.sender,
       senderFirstName: body.from.split(' ')[0],
       senderLastName: body.from.split(' ')[1],
-      emailId: body['Message-Id'],
-      profile: found.profile,
+      recipientEmail: body.recipient,
+      conversation: found.conversation,
     }).save()
     .then(message => {
       res.json(message);
