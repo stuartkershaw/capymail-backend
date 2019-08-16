@@ -1,3 +1,5 @@
+<img src="https://cdn.theatlantic.com/assets/media/img/photo/2018/11/photos-companionable-capybaras/c02_142762210/main_900.jpg?1543518717" />
+
 capymail backend
 ===
 > Realtime messaging with mailgun and socket.io
