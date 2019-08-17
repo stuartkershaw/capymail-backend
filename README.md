@@ -9,12 +9,12 @@ capymail backend
 Include a `.env` file with the following environment variables:
 
 ```
-CORS_ORIGIN=http://localhost:8080
-MAILGUN_API_KEY={your mailgun api key}
-MAILGUN_DOMAIN={your mailgun domain}
-MONGODB_URI=mongodb://localhost/dev
-NODE_ENV=development
 SECRET={a random string}
+CORS_ORIGIN=http://localhost:4000
+MONGODB_URI=mongodb://localhost/dev
+MAILGUN_DOMAIN={your mailgun domain}
+MAILGUN_API_KEY={your mailgun api key}
+NODE_ENV=development
 ```
 
 Configure a Catch All route in your mailgain dashboard:
@@ -23,4 +23,4 @@ Configure a Catch All route in your mailgain dashboard:
 ## Start
 
 * Start the mongodb `npm run dbon`
-* Start the API server `npm run api_start`
+* Start the API server `npm run start`
