@@ -6,12 +6,11 @@
   "scripts": {
     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
     "dboff": "killall mongod",
-    "api_start": "node ./index.js",
-    "api_watch": "nodemon ./index.js",
-    "start": "node index.js"
+    "start": "node ./index.js",
+    "watch": "nodemon ./index.js"
   },
   "engines": {
-    "node": "8.4.0"
+    "node": "12.7.0"
   },
   "repository": {
     "type": "git",
@@ -24,18 +23,18 @@
   },
   "homepage": "https://github.com/stuartkershaw/capymail-backend#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
-    "body-parser": "^1.18.2",
-    "cors": "^2.8.4",
-    "dotenv": "^4.0.0",
-    "express": "^4.16.2",
-    "http-errors": "^1.6.2",
-    "jsonwebtoken": "^8.1.0",
-    "mailgun-js": "^0.13.1",
-    "mongoose": "^4.13.7",
-    "morgan": "^1.9.0",
-    "socket.io": "^2.0.4",
-    "superagent": "^3.8.2",
-    "validator": "^9.2.0"
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^5.6.9",
+    "morgan": "^1.9.1",
+    "socket.io": "^2.2.0",
+    "superagent": "^5.1.0",
+    "validator": "^11.1.0"
   }
 }
