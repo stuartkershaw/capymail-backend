@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const httpErrors = require('http-errors');
-const crypto, { randomBytes } = require('crypto');
+const crypto = require('crypto');
+const { randomBytes } = crypto;
 
 const accountSchema = mongoose.Schema({
   username: { type: String, required: true, unique: true },
