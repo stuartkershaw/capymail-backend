@@ -22,12 +22,14 @@ accountSchema.methods.passwordVerify = function(password) {
       if(!correctPassword) {
         throw httpErrors(401, '__AUTH_ERROR__ incorrect password');
       }
+
       return this;
     });
 };
 
 accountSchema.methods.tokenCreate = function() {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');
+
   return this.save()
     .then(account => {
       let options = { expiresIn: '7d' };
@@ -38,6 +40,7 @@ accountSchema.methods.tokenCreate = function() {
 accountSchema.methods.update = function(data) {
   let { password } = data;
   delete data.password;
+
   return bcrypt.hash(password, 8)
     .then(passwordHash => {
       this.username = data.username;
@@ -52,6 +55,7 @@ const Account = module.exports = mongoose.model('account', accountSchema);
 Account.create = function(data) {
   let { password } = data;
   delete data.password;
+
   return bcrypt.hash(password, 8)
     .then(passwordHash => {
       data.passwordHash = passwordHash;
