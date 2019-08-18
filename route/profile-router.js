@@ -13,6 +13,7 @@ profileRouter.get('/profile', bearerAuth, (req, res, next) => {
       if (!profile) {
         throw httpErrors(404, '__REQUEST_ERROR__ profile not found');
       }
+
       res.json(profile);
     })
     .catch(next);
@@ -24,6 +25,7 @@ profileRouter.get('/profiles/:id', bearerAuth, (req, res, next) => {
       if (!profile) {
         throw httpErrors(404, '__REQUEST_ERROR__ profile not found');
       }
+
       res.json(profile);
     })
     .catch(next);
@@ -33,6 +35,7 @@ profileRouter.post('/profiles', bearerAuth, (req, res, next) => {
   if (!req.body.firstName || !req.body.lastName) {
     return next(httpErrors(400, '__REQUEST_ERROR__ first name and last name required'));
   }
+
   return new Profile({
     // jshint ignore:start
     ...req.body,
@@ -51,11 +54,13 @@ profileRouter.put('/profiles/:id', bearerAuth, (req, res, next) => {
   if (!req.body.firstName || !req.body.lastName) {
     return next(httpErrors(400, 'first name and last name required'));
   }
+
   Profile.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
     .then(profile => {
       if (!profile) {
         throw httpErrors(404, '__REQUEST_ERROR__ profile not found');
       }
+
       res.json(profile);
     })
     .catch(next);

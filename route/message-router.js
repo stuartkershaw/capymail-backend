@@ -13,11 +13,13 @@ const messageRouter = module.exports = new Router();
 
 messageRouter.get('/messages', bearerAuth, (req, res, next) => {
   console.log(req.query);
+
   Message.find({ conversation: req.query._id })
     .then(messages => {
       if (!messages) {
         throw httpErrors(404, '__REQUEST_ERROR__ messages not found');
       }
+
       res.json(messages);
     })
     .catch(next);
@@ -25,11 +27,13 @@ messageRouter.get('/messages', bearerAuth, (req, res, next) => {
 
 messageRouter.post('/messages', bearerAuth, (req, res, next) => {
   console.log(req.body.message);
+
   if (!req.body.message.content ||! req.body.message.recipientEmail || 
       !req.body.message.senderEmail || !req.body.message.senderFirstName || 
       !req.body.message.senderLastName || !req.body.conversation) {
     return next(httpErrors(400, '__REQUEST_ERROR__ content, recipient, sender, and conversation details required'));
   }
+
   return new Message({
     // jshint ignore:start
     ...req.body.message,
@@ -44,22 +48,26 @@ messageRouter.post('/messages', bearerAuth, (req, res, next) => {
 
 messageRouter.post('/webhooks/mailgun/*', (req, res, next) => {
   const body = req.body;
+
   if (!mailgun.validateWebhook(body.timestamp, body.token, body.signature)) {
     console.error('Request came, but not from Mailgun');
     res.send({ error: { message: 'Invalid signature. Are you even Mailgun?' } });
     return;
   }
+
   next();
 });
 
 messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
   let found;
   const body = req.body;
+
   Message.findOne({ emailId: body['In-Reply-To'] })
   .then(message => {
     if (!message) {
       throw httpErrors(404, '__REQUEST_ERROR__ message not found');
     }
+
     found = message;
   })
   .then(() => {

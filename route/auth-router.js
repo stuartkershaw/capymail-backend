@@ -23,6 +23,7 @@ authRouter.post('/auth', (req, res, next) => {
   if (!req.body.username || !req.body.email || !req.body.password) {
     return next(httpErrors(400, '__REQUEST_ERROR__ username, email, and password required'));
   }
+
   Account.create(req.body)
     .then(account => account.tokenCreate())
     .then(token => {
@@ -36,6 +37,7 @@ authRouter.put('/auth', basicAuth, (req, res, next) => {
   if (!req.body.username || !req.body.email || !req.body.password) {
     return next(httpErrors(400, '__REQUEST_ERROR__ username, email, and password required'));
   }
+
   req.account.update(req.body)
     .then(() => {
       res.sendStatus(200);
