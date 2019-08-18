@@ -18,11 +18,16 @@ NODE_ENV=development
 API_URL=http://localhost:8000
 ```
 
+## Local
 Configure ngrok (or similar) to serve the local API over the internet.
 * `ngrok http { API_URL }`
 
 Configure a Catch All route in your mailgain dashboard:
 * `ngrok url`/webhooks/mailgun/catchall
+
+## Live
+Configure a Catch All route in your mailgain dashboard:
+* `API_URL`/webhooks/mailgun/catchall
 
 ## Start
 
