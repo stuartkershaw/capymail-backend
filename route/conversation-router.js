@@ -1,6 +1,6 @@
 'use strict';
 
-const {Router} = require('express');
+const { Router } = require('express');
 const httpErrors = require('http-errors');
 const Conversation = require('../model/conversation.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
@@ -8,7 +8,7 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const conversationRouter = module.exports = new Router();
 
 conversationRouter.get('/conversations', bearerAuth, (req, res, next) => {
-  Conversation.find({profile: req.query._id})
+  Conversation.find({ profile: req.query._id })
     .then(conversations => {
       if (!conversations) {
         throw httpErrors(404, '__REQUEST_ERROR__ conversations not found');
@@ -44,3 +44,4 @@ conversationRouter.post('/conversations', bearerAuth, (req, res, next) => {
     })
     .catch(next);
 });
+

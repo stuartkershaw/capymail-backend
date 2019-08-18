@@ -1,6 +1,6 @@
 'use strict';
 
-const {Router} = require('express');
+const { Router } = require('express');
 const httpErrors = require('http-errors');
 const Profile = require('../model/profile.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
@@ -8,7 +8,7 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const profileRouter = module.exports = new Router();
 
 profileRouter.get('/profile', bearerAuth, (req, res, next) => {
-  Profile.findOne({account: req.account._id})
+  Profile.findOne({ account: req.account._id })
     .then(profile => {
       if (!profile) {
         throw httpErrors(404, '__REQUEST_ERROR__ profile not found');
@@ -60,3 +60,4 @@ profileRouter.put('/profiles/:id', bearerAuth, (req, res, next) => {
     })
     .catch(next);
 });
+

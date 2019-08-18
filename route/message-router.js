@@ -1,19 +1,19 @@
 'use strict';
 
-const {Router} = require('express');
+const { Router } = require('express');
 const httpErrors = require('http-errors');
 const Message = require('../model/message.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const mailgun_api = process.env.MAILGUN_API_KEY; 
 const mailgun_domain = process.env.MAILGUN_DOMAIN;
-const mailgun = require('mailgun-js')({apiKey: mailgun_api, domain: mailgun_domain});
+const mailgun = require('mailgun-js')({ apiKey: mailgun_api, domain: mailgun_domain });
 
 const messageRouter = module.exports = new Router();
 
 messageRouter.get('/messages', bearerAuth, (req, res, next) => {
   console.log(req.query);
-  Message.find({conversation: req.query._id})
+  Message.find({ conversation: req.query._id })
     .then(messages => {
       if (!messages) {
         throw httpErrors(404, '__REQUEST_ERROR__ messages not found');
@@ -43,7 +43,7 @@ messageRouter.post('/messages', bearerAuth, (req, res, next) => {
 });
 
 messageRouter.post('/webhooks/mailgun/*', (req, res, next) => {
-  let body = req.body;
+  const body = req.body;
   if (!mailgun.validateWebhook(body.timestamp, body.token, body.signature)) {
     console.error('Request came, but not from Mailgun');
     res.send({ error: { message: 'Invalid signature. Are you even Mailgun?' } });
@@ -53,9 +53,9 @@ messageRouter.post('/webhooks/mailgun/*', (req, res, next) => {
 });
 
 messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
-  let found;
-  let body = req.body;
-  Message.findOne({emailId: body['In-Reply-To']})
+  const found;
+  const body = req.body;
+  Message.findOne({ emailId: body['In-Reply-To'] })
   .then(message => {
     if (!message) {
       throw httpErrors(404, '__REQUEST_ERROR__ message not found');
@@ -79,3 +79,4 @@ messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
   })
   .catch(next);
 });
+
