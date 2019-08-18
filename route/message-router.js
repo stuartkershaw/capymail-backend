@@ -53,7 +53,7 @@ messageRouter.post('/webhooks/mailgun/*', (req, res, next) => {
 });
 
 messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
-  const found;
+  let found;
   const body = req.body;
   Message.findOne({ emailId: body['In-Reply-To'] })
   .then(message => {
