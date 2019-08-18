@@ -4,23 +4,34 @@ capymail backend
 ===
 > Realtime messaging with mailgun and socket.io
 
+API for https://github.com/stuartkershaw/capymail-frontend
+
 ## Configure
 
 Include a `.env` file with the following environment variables:
 
 ```
-CORS_ORIGIN=http://localhost:8080
-MAILGUN_API_KEY={your mailgun api key}
-MAILGUN_DOMAIN={your mailgun domain}
-MONGODB_URI=mongodb://localhost/dev
-NODE_ENV=development
 SECRET={a random string}
+CORS_ORIGIN=http://localhost:4000
+MONGODB_URI=mongodb://localhost/dev
+MAILGUN_DOMAIN={your mailgun domain}
+MAILGUN_API_KEY={your mailgun api key}
+NODE_ENV=development
+API_URL=http://localhost:8000
 ```
 
+## Local
+Configure ngrok (or similar) to serve the local API over the internet.
+* `ngrok http { API PORT }`
+
 Configure a Catch All route in your mailgain dashboard:
-* {your API_URL} /webhooks/mailgun/catchall
+* `ngrok url`/webhooks/mailgun/catchall
+
+## Live
+Configure a Catch All route in your mailgain dashboard:
+* `API_URL`/webhooks/mailgun/catchall
 
 ## Start
 
 * Start the mongodb `npm run dbon`
-* Start the API server `npm run api_start`
+* Start the API server `npm run start`
