@@ -1,19 +1,18 @@
 'use strict';
 
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const {randomBytes} = crypto;
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const httpErrors = require('http-errors');
+const crypto, { randomBytes } = require('crypto');
 
 const accountSchema = mongoose.Schema({
-  username: {type: String, required: true, unique: true},
-  email: {type: String, required: true},
-  passwordHash: {type: String, required: true},
-  tokenSeed: {type: String, required: true, unique: true},
-  created: {type: Date, default: () => new Date()},
-  profile: {type: mongoose.Schema.Types.ObjectId},
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
+  passwordHash: { type: String, required: true },
+  tokenSeed: { type: String, required: true, unique: true },
+  profile: { type: mongoose.Schema.Types.ObjectId },
+  created: { type: Date, default: () => new Date() },
 });
 
 accountSchema.methods.passwordVerify = function(password) {
@@ -30,13 +29,13 @@ accountSchema.methods.tokenCreate = function() {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');
   return this.save()
     .then(account => {
-      let options = {expiresIn: '7d'};
-      return jwt.sign({tokenSeed: account.tokenSeed}, process.env.SECRET, options);
+      let options = { expiresIn: '7d' };
+      return jwt.sign({ tokenSeed: account.tokenSeed }, process.env.SECRET, options);
     });
 };
 
 accountSchema.methods.update = function(data) {
-  let {password} = data;
+  let { password } = data;
   delete data.password;
   return bcrypt.hash(password, 8)
     .then(passwordHash => {
@@ -50,7 +49,7 @@ accountSchema.methods.update = function(data) {
 const Account = module.exports = mongoose.model('account', accountSchema);
 
 Account.create = function(data) {
-  let {password} = data;
+  let { password } = data;
   delete data.password;
   return bcrypt.hash(password, 8)
     .then(passwordHash => {
@@ -59,3 +58,4 @@ Account.create = function(data) {
       return new Account(data).save();
     });
 };
+
