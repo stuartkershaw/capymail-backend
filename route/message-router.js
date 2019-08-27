@@ -1,5 +1,6 @@
 'use strict';
 
+const Pusher = require('pusher');
 const { Router } = require('express');
 const httpErrors = require('http-errors');
 const Message = require('../model/message.js');
@@ -8,6 +9,11 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const mailgun_api = process.env.MAILGUN_API_KEY; 
 const mailgun_domain = process.env.MAILGUN_DOMAIN;
 const mailgun = require('mailgun-js')({ apiKey: mailgun_api, domain: mailgun_domain });
+
+const pusher_app_id = process.env.PUSHER_APP_ID;
+const pusher_key = process.env.PUSHER_KEY;
+const pusher_secret = process.env.PUSHER_SECRET;
+const pusher_cluster = process.env.PUSHER_CLUSTER;
 
 const messageRouter = module.exports = new Router();
 
@@ -41,6 +47,23 @@ messageRouter.post('/messages', bearerAuth, (req, res, next) => {
     conversation: req.body.conversation._id,
   }).save()
     .then(message => {
+      const data = {
+        to: `${message.recipientEmail}, ${message.senderEmail}`,
+        from: `${message.senderFirstName} ${message.senderLastName} <postmaster@${mailgun_domain}>`,
+        subject: `${message.subject}`,
+        html: `${message.content}`
+      };
+
+      mailgun.messages().send(data, function (error, body) {
+        Message.findOne({ _id: message._id}, function (err, message) {
+          message.save(function (err) {
+            if (err) {
+              throw httpErrors(404, '__REQUEST_ERROR__ message not found');  
+            }
+          });
+        });
+      });
+
       res.json(message);
     })
     .catch(next);
@@ -82,6 +105,18 @@ messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
       conversation: found.conversation,
     }).save()
     .then(message => {
+      const channels_client = new Pusher({
+        appId: pusher_app_id,
+        key: pusher_key,
+        secret: pusher_secret,
+        cluster: pusher_cluster,
+        encrypted: true
+      });
+
+      channels_client.trigger('my-channel', 'my-event', {
+        "message": message 
+      });
+
       res.json(message);
     });
   })
