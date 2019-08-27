@@ -111,7 +111,7 @@ messageRouter.post('/webhooks/mailgun/catchall', (req, res, next) => {
         key: pusher_key,
         secret: pusher_secret,
         cluster: pusher_cluster,
-        encrypted: true
+        useTLS: true
       });
 
       channels_client.trigger('my-channel', 'my-event', {
