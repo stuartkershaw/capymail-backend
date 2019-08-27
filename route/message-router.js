@@ -55,7 +55,7 @@ messageRouter.post('/messages', bearerAuth, (req, res, next) => {
       };
 
       mailgun.messages().send(data, function (error, body) {
-        Message.findOne({ _id: message.messageId }, function (err, message) {
+        Message.findOne({ _id: message._id}, function (err, message) {
           message.emailId = body.id;
           message.save(function (err) {
             if (err) {
